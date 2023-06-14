@@ -6,6 +6,7 @@ function App() {
   const [ data, setData ] = useState(null);
   const [ query, setQuery] = useState("");
   const [ filter, setFilter] = useState(null)
+  const [ isActive, setIsActive ] = useState(false);
 
   const getApiData = async () => {
     const response = await fetch('https://newsapi.org/v2/top-headlines?country=id&apiKey=24173b501c0f4b20aa1f94625417dce0')
@@ -21,6 +22,12 @@ function App() {
 
   const handleQuery = (e) => {
     setQuery(e.target.value);
+    if (e.target.value == '') {
+      setIsActive(false)
+    }
+    else {
+      setIsActive(true)
+    }
   }
 
   const handleSearch = (e) => {
@@ -36,6 +43,7 @@ function App() {
   const handleClear = (e) => {
     setQuery('');
     setFilter(data);
+    setIsActive(false);
   }
 
   return (
@@ -47,7 +55,7 @@ function App() {
           <div className="input-group">
             <input className="form-control form-control-lg" type="text" placeholder="Search" value={query} onChange={handleQuery} id="search" />
             <button type="button" className="btn bg-transparent" style={{marginLeft : '-40px', zIndex : '100'}} onClick={handleClear}>
-              <i className="fa fa-times"></i>
+              <i className="fa fa-times" style={{opacity : isActive ? '0.25' : '0'}}></i>
             </button>
             <div className="input-group-append">
               <button className="btn btn-secondary" type="submit">
