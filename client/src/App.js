@@ -86,6 +86,9 @@ function App() {
     setIsFilterActive(true);
     
     var newData = [...data]
+    if (isActive) {
+      newData = [...filter]
+    }
     if (isSortActive) {
       newData = [...sorted]
     }
@@ -103,6 +106,9 @@ function App() {
     // ascending
     if (!toggleSort) {
       var newData = [...data]
+      if (isActive) {
+        newData = [...filter]
+      }
       if (isFilterActive) {
         newData = [...authorFilter]
       }
