@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import axios from 'axios';
 // import logo from './logo.svg';
 // import './App.css';
 
 function App() {
   // data
-  const [ data, setData ] = useState(null);
+  const [ actData, setActData ] = useState(null);
 
   // sort
   const [ isSortActive, setIsSortActive ] = useState(false);
@@ -28,7 +29,7 @@ function App() {
     const response = await fetch('https://newsapi.org/v2/top-headlines?country=id&apiKey=24173b501c0f4b20aa1f94625417dce0')
       .then((response) => response.json());
 
-      setData(response.articles);
+      setActData(response.articles);
       setFilter(response.articles);
 
       let listAuthors = []
@@ -60,7 +61,7 @@ function App() {
   const handleSearch = (e) => {
     e.preventDefault();
 
-    var newData = [...data]
+    var newData = [...actData]
     if (isSortActive) {
       newData = [...sorted]
     }
@@ -76,7 +77,7 @@ function App() {
 
   const handleClear = (e) => {
     setQuery('');
-    setFilter(data);
+    setFilter(actData);
     setIsActive(false);
   }
 
@@ -85,7 +86,7 @@ function App() {
     const curFilter = e.target.text;
     setIsFilterActive(true);
     
-    var newData = [...data]
+    var newData = [...actData]
     if (isActive) {
       newData = [...filter]
     }
@@ -103,25 +104,35 @@ function App() {
     setIsSortActive(true);
     setToggleSort(!toggleSort); // true: asc, false: desc
 
+    var newData = [...actData]
+    if (isActive) {
+      newData = [...filter]
+    }
+    if (isFilterActive) {
+      newData = [...authorFilter]
+    }
+
+    // sorting
     // ascending
     if (!toggleSort) {
-      var newData = [...data]
-      if (isActive) {
-        newData = [...filter]
-      }
-      if (isFilterActive) {
-        newData = [...authorFilter]
-      }
       newData = newData.sort((a,b) => a.title > b.title ? 1 : -1)
       setSorted(newData);
       setFilter(newData);
+    }
+    // descending
+    else if (toggleSort) {
+      axios
+        .post('/api/sort', newData)
+        .then((response) => response.data)
+        .then((data) => setFilter(data))
+      setSorted(filter)
     }
   }
 
   const handleClearFilter = (e) => {
     setIsFilterActive(false);
     setIsSortActive(false);
-    setFilter([...data]);
+    setFilter([...actData]);
   }
 
   return (
