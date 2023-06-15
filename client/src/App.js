@@ -34,7 +34,7 @@ function App() {
 
       let listAuthors = []
       for (let i = 0; i < response.articles.length; i++) {
-        if (listAuthors.indexOf(response.articles[i].author) == -1) {
+        if (listAuthors.indexOf(response.articles[i].author) === -1) {
           listAuthors.push(response.articles[i].author)
         }
       }
@@ -50,7 +50,7 @@ function App() {
   // query
   const handleQuery = (e) => {
     setQuery(e.target.value);
-    if (e.target.value == '') {
+    if (e.target.value === '') {
       setIsActive(false)
     }
     else {
@@ -184,7 +184,7 @@ function App() {
         <div className="card-list mt-4">
         {filter &&
           filter.map(({ url, author, title }) => (
-            <a href={url} className="card mb-3" target="_blank" key={url}>
+            <a href={url} className="card mb-3" rel="noreferrer" target="_blank" key={url}>
               <div className="card-body">
                 <p className="card-text text-dark">{author}</p>
                 <h5 className="card-title text-dark">{title}</h5>
