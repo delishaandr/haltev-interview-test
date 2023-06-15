@@ -1,12 +1,28 @@
 import React, { useState, useEffect } from 'react';
+import Dropdown from 'react-bootstrap/Dropdown';
+import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 // import logo from './logo.svg';
 // import './App.css';
 
 function App() {
+  // data
   const [ data, setData ] = useState(null);
-  const [ query, setQuery] = useState("");
-  const [ filter, setFilter] = useState(null)
+
+  // sort
+  const [ isSortActive, setIsSortActive ] = useState(false);
+  const [ toggleSort, setToggleSort ] = useState(false)
+  const [ sorted, setSorted ] = useState("");
+
+  // author filter
+  const [ isFilterActive, setIsFilterActive ] = useState(false);
+  const [ authors, setAuthors ] = useState([]);
+  const [ authorFilter, setAuthorFilter ] = useState("");
+
+  // query
   const [ isActive, setIsActive ] = useState(false);
+  const [ query, setQuery] = useState("");
+  const [ filter, setFilter ] = useState(null);
 
   const getApiData = async () => {
     const response = await fetch('https://newsapi.org/v2/top-headlines?country=id&apiKey=24173b501c0f4b20aa1f94625417dce0')
@@ -14,12 +30,23 @@ function App() {
 
       setData(response.articles);
       setFilter(response.articles);
+
+      let listAuthors = []
+      for (let i = 0; i < response.articles.length; i++) {
+        if (listAuthors.indexOf(response.articles[i].author) == -1) {
+          listAuthors.push(response.articles[i].author)
+        }
+      }
+      listAuthors = listAuthors.sort();
+
+      setAuthors(listAuthors);
   }
 
   useEffect(() => {
     getApiData();
   }, []);
 
+  // query
   const handleQuery = (e) => {
     setQuery(e.target.value);
     if (e.target.value == '') {
@@ -34,6 +61,13 @@ function App() {
     e.preventDefault();
 
     var newData = [...data]
+    if (isSortActive) {
+      newData = [...sorted]
+    }
+    if (isFilterActive) {
+      newData = [...authorFilter]
+    }
+
     newData = newData.filter(item => {
         return item.title.toLowerCase().includes(query.toLowerCase())
     })
@@ -44,6 +78,19 @@ function App() {
     setQuery('');
     setFilter(data);
     setIsActive(false);
+  }
+
+  // author filter
+  const handleAuthorFilter = (e) => {
+    const curFilter = e.target.text;
+    setIsFilterActive(true)
+    
+    var newData = [...data]
+    newData = newData.filter(item => {
+      return item.author.toLowerCase() === curFilter.toLowerCase()
+    })
+    setAuthorFilter(newData);
+    setFilter(newData);
   }
 
   return (
@@ -64,6 +111,34 @@ function App() {
             </div>
           </div>
         </form>
+        <div className="d-flex flex-row mt-4">
+          <div className="p-3 mt-1"><h5><strong>Filters</strong></h5></div>
+          <div className="p-3">
+            <Dropdown>
+              <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+                Author
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                {authors.map((item, index) => (
+                    <Dropdown.Item href="#" key={index} onClick={handleAuthorFilter}>
+                      {item}
+                    </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
+          <div className="p-3">
+            <ButtonGroup aria-label="Sort">
+              <Button variant="secondary">Sort</Button>
+              <Button variant="secondary" id="sort-label"><i className="fa fa-sort"></i></Button>
+            </ButtonGroup>
+          </div>
+          <div className="p-3">
+            <button type="button" className="btn btn-secondary">Clear Filters</button>
+          </div>
+        </div>
+        
         <div className="card-list mt-4">
         {filter &&
           filter.map(({ url, author, title }) => (
