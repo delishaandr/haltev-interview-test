@@ -52,6 +52,10 @@ app.get('/api/load-data', (req, res) => {
 
   getApiData().then((data) => {
     apiData = data.articles;
+    db.articles.destroy({
+      where: {},
+      truncate: true
+    })
     for (let i = 0; i < apiData.length; i++) {
       db.articles.create({
         sourceid: apiData[i].source.id,
@@ -76,6 +80,23 @@ app.get('/api/read-data', (req, res) => {
     articleList = u
     res.send(articleList)
   });
+})
+
+app.post('/api/insert-data', (req, res) => {
+  let data = req.body;
+  db.articles.create({
+    sourceid: data.sourceid,
+    sourcename: data.sourcename,
+    author: data.author,
+    title: data.title,
+    description: data.description,
+    url: data.url,
+    urlToImage: data.urlToImage,
+    publishedAt: data.publishedAt,
+    content: data.content
+  });
+  res.send('Data has been inserted')
+  
 })
 
 app.listen(PORT, () => {
