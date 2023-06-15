@@ -83,14 +83,33 @@ function App() {
   // filters
   const handleAuthorFilter = (e) => {
     const curFilter = e.target.text;
-    setIsFilterActive(true)
+    setIsFilterActive(true);
     
     var newData = [...data]
+    if (isSortActive) {
+      newData = [...sorted]
+    }
     newData = newData.filter(item => {
       return item.author.toLowerCase() === curFilter.toLowerCase()
     })
     setAuthorFilter(newData);
     setFilter(newData);
+  }
+
+  const handleSort = (e) => {
+    setIsSortActive(true);
+    setToggleSort(!toggleSort); // true: asc, false: desc
+
+    // ascending
+    if (!toggleSort) {
+      var newData = [...data]
+      if (isFilterActive) {
+        newData = [...authorFilter]
+      }
+      newData = newData.sort((a,b) => a.title > b.title ? 1 : -1)
+      setSorted(newData);
+      setFilter(newData);
+    }
   }
 
   const handleClearFilter = (e) => {
@@ -137,7 +156,7 @@ function App() {
           <div className="p-3">
             <ButtonGroup aria-label="Sort">
               <Button variant="secondary">Sort</Button>
-              <Button variant="secondary" id="sort-label"><i className="fa fa-sort"></i></Button>
+              <Button variant="secondary" id="sort-label" onClick={handleSort}><i className="fa fa-sort"></i></Button>
             </ButtonGroup>
           </div>
           <div className="p-3">
