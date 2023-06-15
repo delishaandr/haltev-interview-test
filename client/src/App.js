@@ -80,7 +80,7 @@ function App() {
     setIsActive(false);
   }
 
-  // author filter
+  // filters
   const handleAuthorFilter = (e) => {
     const curFilter = e.target.text;
     setIsFilterActive(true)
@@ -91,6 +91,12 @@ function App() {
     })
     setAuthorFilter(newData);
     setFilter(newData);
+  }
+
+  const handleClearFilter = (e) => {
+    setIsFilterActive(false);
+    setIsSortActive(false);
+    setFilter([...data]);
   }
 
   return (
@@ -135,7 +141,7 @@ function App() {
             </ButtonGroup>
           </div>
           <div className="p-3">
-            <button type="button" className="btn btn-secondary">Clear Filters</button>
+            <button type="button" className="btn btn-secondary" style={{opacity : isFilterActive || isSortActive ? '1' : '0'}} onClick={handleClearFilter}>Clear Filters</button>
           </div>
         </div>
         
