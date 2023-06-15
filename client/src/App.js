@@ -173,7 +173,7 @@ function App() {
           <div className="p-3">
             <ButtonGroup aria-label="Sort">
               <Button variant="secondary">Sort</Button>
-              <Button variant="secondary" id="sort-label" onClick={handleSort}><i className="fa fa-sort"></i></Button>
+              <Button variant="secondary" id="sort-label" onClick={handleSort}><i className={ !isSortActive ? "fa fa-sort" : toggleSort ? "fa fa-sort-up" : "fa fa-sort-down"}></i></Button>
             </ButtonGroup>
           </div>
           <div className="p-3">
