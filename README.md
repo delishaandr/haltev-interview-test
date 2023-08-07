@@ -1,4 +1,4 @@
-# haltev-interview-test
+# simple-news-search
 
 ## Steps
 1. Run pada command line
