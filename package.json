@@ -1,5 +1,5 @@
 {
-  "name": "haltev-interview-test",
+  "name": "simple-news-search",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/delishaandr/haltev-interview-test.git"
+    "url": "git+https://github.com/delishaandr/simple-news-search.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/delishaandr/haltev-interview-test/issues"
+    "url": "https://github.com/delishaandr/simple-news-search/issues"
   },
-  "homepage": "https://github.com/delishaandr/haltev-interview-test#readme",
+  "homepage": "https://github.com/delishaandr/simple-news-search#readme",
   "dependencies": {
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
